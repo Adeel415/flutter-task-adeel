@@ -1,9 +1,17 @@
 import 'package:flutter/material.dart';
 
-const Color kcPrimaryColor = Color(0xFF9600FF);
-const Color kcPrimaryColorDark = Color(0xFF300151);
-const Color kcDarkGreyColor = Color(0xFF1A1B1E);
-const Color kcMediumGrey = Color(0xFF474A54);
-const Color kcLightGrey = Color.fromARGB(255, 187, 187, 187);
-const Color kcVeryLightGrey = Color(0xFFE3E3E3);
-const Color kcBackgroundColor = kcDarkGreyColor;
+class AppColors {
+  static const Color primaryBlue = Color(0xFF1A73E8);
+  static const Color primaryDarkBlue = Color(0xFF0D47A1);
+  static const Color green = Color(0xFF34A853);
+
+  static const Color background = Color(0xFFF5F5F5);
+  static const Color cardBackground = Colors.white;
+
+
+  static const Color textPrimary = Color(0xFF202124);
+  static const Color textSecondary = Color(0xFF5F6368);
+
+  static const Color border = Color(0xFFE0E0E0);
+  static const Color chipSelected = Color(0xFFE8F0FE);
+}
