@@ -3,10 +3,10 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('HomeViewModel', () {
-    late MainViewmodel model;
+    late MainViewModel model;
 
     setUp(() {
-      model = MainViewmodel();
+      model = MainViewModel();
     });
 
     test('should be initialized correctly', () {

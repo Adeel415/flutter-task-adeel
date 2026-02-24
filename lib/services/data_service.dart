@@ -1,36 +1,54 @@
-import 'package:stacked/stacked.dart';
-import 'package:flutter_task_adeel/models/bundle.dart';
-import 'package:flutter_task_adeel/models/plan.dart';
+import '../models/bundle.dart';
+import '../models/plan.dart';
 
 class DataService {
-  static const List<Map<String, dynamic>> _bundles = [
-    {'name': '3 GB', 'data': '3 GB', 'validity': 30, 'price': 2.99, 'type': 'standard'},
-    {'name': '5 GB', 'data': '5 GB', 'validity': 30, 'price': 3.50, 'type': 'standard'},
-    {'name': '10 GB', 'data': '10 GB', 'validity': 30, 'price': 4.25, 'type': 'standard'},
-    {'name': '20 GB', 'data': '20 GB', 'validity': 30, 'price': 5.50, 'type': 'standard'},
-  ];
-
-  static const List<Map<String, dynamic>> _regionalPlans = [
-    {'name': 'EuroConnect', 'data': '1 GB', 'validity': 7, 'price': 2.51},
-    {'name': 'Worldlyours', 'data': '1 GB', 'validity': 7, 'price': 2.52},
-  ];
-
-  List<Bundle> getBundles() {
-    return _bundles.map((b) => Bundle(
-      name: b['name'],
-      data: b['data'],
-      validity: '${b['validity']} days',
-      price: b['price'],
-      type: b['type'],
-    )).toList();
+  List<Bundle> getBundlesForTurkey() {
+    return const [
+      Bundle(id: 'b1', dataGB: 3, validDays: 30, priceUSD: 2.99),
+      Bundle(id: 'b2', dataGB: 5, validDays: 7, priceUSD: 3.50),
+      Bundle(id: 'b3', dataGB: 5, validDays: 15, priceUSD: 3.99),
+      Bundle(id: 'b4', dataGB: 5, validDays: 30, priceUSD: 4.25),
+      Bundle(id: 'b5', dataGB: 10, validDays: 10, priceUSD: 5.50),
+      Bundle(id: 'b6', dataGB: 10, validDays: 15, priceUSD: 5.75),
+      Bundle(id: 'b7', dataGB: 20, validDays: 30, priceUSD: 7.48),
+      Bundle(id: 'b8', dataGB: 0, validDays: 10, priceUSD: 5.50, isUnlimited: true),
+    ];
   }
 
-  List<Plan> getRegionalPlans() {
-    return _regionalPlans.map((p) => Plan(
-      name: p['name'],
-      data: p['data'],
-      validity: '${p['validity']} days',
-      price: p['price'],
-    )).toList();
+  List<Plan> getRegionalPlansForTurkey() {
+    return const [
+      Plan(
+        id: 'p1',
+        name: 'EuroConnect',
+        dataLabel: '1 GB',
+        validLabel: '7 days',
+        supportedCountries: 32,
+        priceUSD: 2.51,
+      ),
+      Plan(
+        id: 'p2',
+        name: 'Global Unlimited',
+        dataLabel: 'Unlimited',
+        validLabel: '1 day',
+        supportedCountries: 34,
+        priceUSD: 2.99,
+      ),
+      Plan(
+        id: 'p3',
+        name: 'EuroLink',
+        dataLabel: '1 GB',
+        validLabel: '1 day',
+        supportedCountries: 34,
+        priceUSD: 2.52,
+      ),
+      Plan(
+        id: 'p4',
+        name: 'worldisyours',
+        dataLabel: '1 GB',
+        validLabel: '1 day',
+        supportedCountries: 57,
+        priceUSD: 3.00,
+      ),
+    ];
   }
 }

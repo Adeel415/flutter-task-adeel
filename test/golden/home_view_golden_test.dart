@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_task_adeel/ui/views/main/main_view.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:golden_toolkit/golden_toolkit.dart';
 import 'package:flutter_task_adeel/app/app.locator.dart';
-import 'package:flutter_task_adeel/ui/views/home/main_view.dart';
 
 void main() {
   setUpAll(() => setupLocator());
@@ -18,7 +18,7 @@ void main() {
     await tester.pumpWidget(
       const MediaQuery(
         data: MediaQueryData(size: Size(393, 852), devicePixelRatio: 1.0),
-        child: MaterialApp(debugShowCheckedModeBanner: false, home: HomeView()),
+        child: MaterialApp(debugShowCheckedModeBanner: false, home: MainView()),
       ),
     );
 

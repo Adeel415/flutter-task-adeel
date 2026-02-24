@@ -51,7 +51,7 @@ class InfoAlertDialog extends StackedView<InfoAlertDialogModel> {
                         request.description!,
                         style: const TextStyle(
                           fontSize: 14,
-                          color: AppColors.primaryDarkBlue,
+                          color: AppColors.priceBlue,
                         ),
                         maxLines: 3,
                         softWrap: true,

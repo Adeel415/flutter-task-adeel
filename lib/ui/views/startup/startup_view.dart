@@ -3,7 +3,7 @@ import 'package:stacked/stacked.dart';
 import 'startup_viewmodel.dart';
 
 class StartupView extends StackedView<StartupViewModel> {
-  const StartupView({Key? key}) : super(key: key);
+  const StartupView({super.key});
 
   @override
   Widget builder(
@@ -11,33 +11,43 @@ class StartupView extends StackedView<StartupViewModel> {
       StartupViewModel viewModel,
       Widget? child,
       ) {
-    // Call navigation after build
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      viewModel.runStartupLogic();
-    });
-
-    return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
+    return const Scaffold(
+      backgroundColor: Colors.black,
+      body: SafeArea(
+        child: Align(
+          alignment: Alignment.topLeft,
+          child: Padding(
+            padding:  EdgeInsets.all(16.0),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children:  [
+                Icon(
+                  Icons.filter_list,
+                  color: Colors.green,
+                  size: 20,
+                ),
+                SizedBox(width: 4),
+                Text(
+                  'Filter',
+                  style: TextStyle(
+                    color: Colors.green,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
             ),
-            SizedBox(height: 20),
-            Text(
-              'Loading Bundles...',
-              style: TextStyle(
-                fontSize: 16,
-                color: Colors.grey[600],
-              ),
-            ),
-          ],
+          ),
         ),
       ),
     );
   }
 
   @override
-  StartupViewModel viewModelBuilder(BuildContext context) => StartupViewModel();
+  StartupViewModel viewModelBuilder(BuildContext context) =>
+      StartupViewModel();
+
+  @override
+  void onViewModelReady(StartupViewModel viewModel) =>
+      viewModel.runStartupLogic();
 }

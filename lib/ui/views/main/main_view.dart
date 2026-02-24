@@ -1,265 +1,181 @@
 import 'package:flutter/material.dart';
-import 'package:stacked/stacked.dart';
-import 'package:flutter_task_adeel/ui/common/app_colors.dart';
-import 'package:flutter_task_adeel/ui/common/app_strings.dart';
-import 'package:flutter_task_adeel/ui/views/main/main_viewmodel.dart';
+import 'package:provider/provider.dart';
+import '../../bottom_sheets/notice/cart_sheet.dart';
+import 'main_viewmodel.dart';
+import '../../common/app_colors.dart';
+import '../../common/app_strings.dart';
+import '../../widgets/bundle_card.dart';
+import '../../widgets/category_chip.dart';
+import '../../widgets/plan_card.dart';
 
-class MainView extends StackedView<MainViewModel> {
-  const MainView({Key? key}) : super(key: key);
+class MainView extends StatelessWidget {
+  const MainView({super.key});
 
   @override
-  Widget builder(
-      BuildContext context,
-      MainViewModel viewModel,
-      Widget? child,
-      ) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        leading: const Padding(
-          padding: EdgeInsets.only(left: 16),
-          child: Icon(Icons.arrow_back, color: Color(0xFF202124), size: 24),
-        ),
-        title: const Text(
-          'Bundles Turkey',
-          style: TextStyle(
-            color: Color(0xFF202124),
-            fontSize: 18,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-        centerTitle: false,
-        actions: const [
-          Padding(
-            padding: EdgeInsets.only(right: 16),
-            child: Icon(Icons.more_vert, color: Color(0xFF202124), size: 24),
-          ),
-        ],
-      ),
-      body: viewModel.isBusy
-          ? const Center(child: CircularProgressIndicator())
-          : SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Time and Location Row
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text(
-                  '9:41',
-                  style: TextStyle(
-                    color: Color(0xFF202124),
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                const Text(
-                  'Turkey',
-                  style: TextStyle(
-                    color: Color(0xFF5F6368),
-                    fontSize: 14,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 20),
-
-            // "Where do you need internet?" Text
-            const Text(
-              'Where do you need internet?',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.w600,
-                color: Color(0xFF202124),
-              ),
-            ),
-            const SizedBox(height: 16),
-
-            // Category Chips Row
-            Row(
-              children: [
-                _buildCategoryChip('All', viewModel.selectedCategory == 'All', () => viewModel.selectCategory('All')),
-                const SizedBox(width: 8),
-                _buildCategoryChip('Standard', viewModel.selectedCategory == 'Standard', () => viewModel.selectCategory('Standard')),
-                const SizedBox(width: 8),
-                _buildCategoryChip('Unlimited', viewModel.selectedCategory == 'Unlimited', () => viewModel.selectCategory('Unlimited')),
-              ],
-            ),
-            const SizedBox(height: 24),
-
-            // "8 Bundles Available for Turkey" Text
-            const Text(
-              '8 Bundles Available for Turkey',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-                color: Color(0xFF202124),
-              ),
-            ),
-            const SizedBox(height: 16),
-
-            // Bundle Cards
-            _buildBundleCard('3 GB', '30 days', 2.99),
-            const SizedBox(height: 12),
-            _buildBundleCard('5 GB', '30 days', 3.50),
-            const SizedBox(height: 12),
-            _buildBundleCard('10 GB', '30 days', 4.25),
-            const SizedBox(height: 12),
-            _buildBundleCard('20 GB', '30 days', 7.48, isUnlimited: true),
-
-            const SizedBox(height: 24),
-
-            // Regional Plans Header
-            const Text(
-              'Regional & Global Plans Supporting Turkey',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-                color: Color(0xFF202124),
-              ),
-            ),
-            const SizedBox(height: 16),
-
-            // EuroConnect Plan
-            _buildRegionalPlanCard(
-              'EuroConnect',
-              '1 GB',
-              '7 days',
-              '34 Supported Countries',
-              2.51,
-            ),
-            const SizedBox(height: 12),
-
-            // EuroLink Plan
-            _buildRegionalPlanCard(
-              'EuroLink',
-              '1 GB',
-              '7 days',
-              '57 Supported Countries',
-              2.52,
-            ),
-
-            const SizedBox(height: 24),
-
-            // Support Section
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: const Color(0xFFF5F5F5),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Column(
-                children: const [
-                  Text(
-                    'Need support?',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                      color: Color(0xFF202124),
+  Widget build(BuildContext context) {
+    return Consumer<MainViewModel>(
+      builder: (context, viewModel, _) {
+        return Scaffold(
+          backgroundColor: AppColors.background,
+          body: Stack(
+            children: [
+              Column(
+                children: [
+                  _buildAppBar(context, viewModel),
+                  Expanded(
+                    child: SingleChildScrollView(
+                      padding: const EdgeInsets.only(bottom: 100),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          _buildSearchBar(),
+                          _buildSelectedCountry(),
+                          _buildCategoryChips(viewModel),
+                          _buildBundleCount(viewModel),
+                          _buildBundleGrid(viewModel),
+                          _buildRegionalPlansSection(viewModel),
+                          _buildSupportSection(),
+                          const SizedBox(height: 16),
+                        ],
+                      ),
                     ),
-                  ),
-                  SizedBox(height: 4),
-                  Text(
-                    'If you need help, contact us on WhatsApp',
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Color(0xFF5F6368),
-                    ),
-                    textAlign: TextAlign.center,
                   ),
                 ],
               ),
-            ),
-            const SizedBox(height: 20),
-          ],
-        ),
-      ),
+              if (viewModel.hasCartItems)
+                _buildCheckoutBar(context, viewModel),
+            ],
+          ),
+        );
+      },
     );
   }
 
-  Widget _buildCategoryChip(String label, bool isSelected, VoidCallback onTap) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+  Widget _buildAppBar(BuildContext context, MainViewModel viewModel) {
+    return Container(
         decoration: BoxDecoration(
-          color: isSelected ? const Color(0xFFE8F0FE) : Colors.transparent,
-          borderRadius: BorderRadius.circular(20),
-          border: Border.all(
-            color: isSelected ? const Color(0xFF1A73E8) : const Color(0xFFDADCE0),
+          gradient:const LinearGradient(
+            begin: Alignment.centerLeft,
+            end: Alignment.centerRight,
+            colors: [
+              AppColors.primary,
+              AppColors.primary2,
+              AppColors.primary
+            ],
           ),
+          borderRadius: BorderRadius.circular(8),
         ),
-        child: Text(
-          label,
-          style: TextStyle(
-            color: isSelected ? const Color(0xFF1A73E8) : const Color(0xFF5F6368),
-            fontSize: 14,
-            fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
+      child: SafeArea(
+        bottom: false,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          child: Row(
+            children: [
+              const Icon(Icons.chevron_left, color: AppColors.primary, size: 28),
+              const Expanded(
+                child: Text(
+                  AppStrings.turkey,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 17,
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.textPrimary,
+                  ),
+                ),
+              ),
+              GestureDetector(
+                onTap: viewModel.hasCartItems
+                    ? () => _showCart(context, viewModel)
+                    : null,
+                child: Stack(
+                  clipBehavior: Clip.none,
+                  children: [
+                    const Icon(Icons.shopping_bag_outlined,
+                        color: AppColors.white, size: 28),
+                    if (viewModel.totalCartQuantity > 0)
+                      Positioned(
+                        right: -4,
+                        top: -4,
+                        child: Container(
+                          padding: const EdgeInsets.all(3),
+                          decoration: const BoxDecoration(
+                            color: AppColors.removeRed,
+                            shape: BoxShape.circle,
+                          ),
+                          child: Text(
+                            '${viewModel.totalCartQuantity}',
+                            style: const TextStyle(
+                              color: AppColors.white,
+                              fontSize: 9,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+                  ],
+                ),
+              ),
+            ],
           ),
         ),
       ),
     );
   }
 
-  Widget _buildBundleCard(String name, String validity, double price, {bool isUnlimited = false}) {
+  Widget _buildSearchBar() {
     return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: const Color(0xFFF5F5F5),
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                name,
-                style: const TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
-                  color: Color(0xFF202124),
-                ),
-              ),
-              Text(
-                'USD ${price.toStringAsFixed(2)}',
-                style: const TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
-                  color: Color(0xFF1A73E8),
-                ),
-              ),
-            ],
-          ),
-          if (isUnlimited) ...[
-            const SizedBox(height: 4),
-            const Text(
-              'Unlimited',
-              style: TextStyle(
-                fontSize: 14,
-                color: Color(0xFF5F6368),
-              ),
+      color: AppColors.white,
+      padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+        decoration: BoxDecoration(
+          color: AppColors.background,
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: const Row(
+          children: [
+            Icon(Icons.search, color: AppColors.subtitleGray, size: 18),
+            SizedBox(width: 8),
+            Text(
+              AppStrings.whereDoYouNeedInternet,
+              style: TextStyle(color: AppColors.subtitleGray, fontSize: 14),
             ),
           ],
-          const SizedBox(height: 4),
-          Text(
-            'Valid for:',
-            style: TextStyle(
-              fontSize: 14,
-              color: const Color(0xFF5F6368),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSelectedCountry() {
+    return Container(
+      color: AppColors.white,
+      padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
+      child: Row(
+        children: [
+          Container(
+            padding:
+            const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+            decoration: BoxDecoration(
+              color: AppColors.background,
+              borderRadius: BorderRadius.circular(20),
             ),
-          ),
-          Text(
-            validity,
-            style: TextStyle(
-              fontSize: 14,
-              color: const Color(0xFF5F6368),
+            child: const Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text('🇹🇷', style: TextStyle(fontSize: 16)),
+                SizedBox(width: 6),
+                Text(
+                  AppStrings.turkey,
+                  style: TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w500,
+                    color: AppColors.textPrimary,
+                  ),
+                ),
+                SizedBox(width: 4),
+                Icon(Icons.close,
+                    size: 14, color: AppColors.subtitleGray),
+              ],
             ),
           ),
         ],
@@ -267,93 +183,214 @@ class MainView extends StackedView<MainViewModel> {
     );
   }
 
-  Widget _buildRegionalPlanCard(String name, String data, String validity, String countries, double price) {
+  Widget _buildCategoryChips(MainViewModel viewModel) {
     return Container(
+      color: AppColors.white,
+      padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
+      child: Row(
+        children: [
+          CategoryChip(
+            label: AppStrings.all,
+            isSelected: viewModel.selectedCategory == BundleCategory.all,
+            onTap: () => viewModel.selectCategory(BundleCategory.all),
+          ),
+          const SizedBox(width: 8),
+          CategoryChip(
+            label: AppStrings.standard,
+            isSelected:
+            viewModel.selectedCategory == BundleCategory.standard,
+            onTap: () => viewModel.selectCategory(BundleCategory.standard),
+          ),
+          const SizedBox(width: 8),
+          CategoryChip(
+            label: AppStrings.unlimited,
+            isSelected:
+            viewModel.selectedCategory == BundleCategory.unlimited,
+            onTap: () =>
+                viewModel.selectCategory(BundleCategory.unlimited),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildBundleCount(MainViewModel viewModel) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+      child: Text(
+        '${viewModel.filteredBundles.length} ${AppStrings.bundlesAvailableFor}',
+        style: const TextStyle(
+          fontSize: 15,
+          fontWeight: FontWeight.w600,
+          color: AppColors.textPrimary,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildBundleGrid(MainViewModel viewModel) {
+    final bundles = viewModel.filteredBundles;
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 12),
+      child: GridView.builder(
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 3,
+          crossAxisSpacing: 8,
+          mainAxisSpacing: 8,
+          childAspectRatio: 0.85,
+        ),
+        itemCount: bundles.length,
+        itemBuilder: (context, index) {
+          final bundle = bundles[index];
+          final qty = viewModel.getQuantityInCart(bundle);
+          return BundleCard(
+            bundle: bundle,
+            quantityInCart: qty,
+            onAdd: () => viewModel.addToCart(bundle),
+            onRemove: () => viewModel.removeFromCart(bundle),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildRegionalPlansSection(MainViewModel viewModel) {
+    return Padding(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            AppStrings.regionalGlobalPlans,
+            style: TextStyle(
+              fontSize: 15,
+              fontWeight: FontWeight.w600,
+              color: AppColors.textPrimary,
+            ),
+          ),
+          const SizedBox(height: 12),
+          GridView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              crossAxisSpacing: 12,
+              mainAxisSpacing: 12,
+              childAspectRatio: 1.5,
+            ),
+            itemCount: viewModel.plans.length,
+            itemBuilder: (context, index) {
+              return PlanCard(plan: viewModel.plans[index]);
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSupportSection() {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 16),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: const Color(0xFFF5F5F5),
-        borderRadius: BorderRadius.circular(8),
+        color: AppColors.white,
+        borderRadius: BorderRadius.circular(12),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          const Text(
+            AppStrings.needSupport,
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w600,
+              color: AppColors.textPrimary,
+            ),
+          ),
+          const SizedBox(height: 4),
+          Wrap(
+            crossAxisAlignment: WrapCrossAlignment.center,
             children: [
-              Text(
-                name,
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                  color: Color(0xFF202124),
-                ),
+              const Text(
+                'If you need help, contact us on ',
+                style:
+                TextStyle(fontSize: 12, color: AppColors.subtitleGray),
               ),
-              Text(
-                'USD ${price.toStringAsFixed(2)}',
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                  color: Color(0xFF1A73E8),
+              Container(
+                padding:
+                const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                decoration: BoxDecoration(
+                  color: const Color(0xFF25D366),
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: const Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(Icons.chat_bubble, color: Colors.white, size: 12),
+                    SizedBox(width: 4),
+                    Text(
+                      'WhatsApp',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ],
-          ),
-          const SizedBox(height: 8),
-          Text(
-            'Data:',
-            style: TextStyle(
-              fontSize: 14,
-              color: const Color(0xFF5F6368),
-            ),
-          ),
-          Text(
-            data,
-            style: TextStyle(
-              fontSize: 14,
-              color: const Color(0xFF5F6368),
-            ),
-          ),
-          const SizedBox(height: 4),
-          Text(
-            'Valid for:',
-            style: TextStyle(
-              fontSize: 14,
-              color: const Color(0xFF5F6368),
-            ),
-          ),
-          Text(
-            validity,
-            style: TextStyle(
-              fontSize: 14,
-              color: const Color(0xFF5F6368),
-            ),
-          ),
-          const SizedBox(height: 4),
-          Text(
-            'Limited to:',
-            style: TextStyle(
-              fontSize: 14,
-              color: const Color(0xFF5F6368),
-            ),
-          ),
-          Text(
-            countries,
-            style: TextStyle(
-              fontSize: 14,
-              color: const Color(0xFF5F6368),
-            ),
           ),
         ],
       ),
     );
   }
 
-  @override
-  MainViewModel viewModelBuilder(BuildContext context) => MainViewModel();
+  Widget _buildCheckoutBar(BuildContext context, MainViewModel viewModel) {
+    return Positioned(
+      bottom: 0,
+      left: 0,
+      right: 0,
+      child: SafeArea(
+        top: false,
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+          child: GestureDetector(
+            onTap: () => _showCart(context, viewModel),
+            child: Container(
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              decoration: BoxDecoration(
+                color: AppColors.checkoutButton,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Center(
+                child: Text(
+                  'USD ${viewModel.totalCartPrice.toStringAsFixed(2)} - ${AppStrings.checkout}',
+                  style: const TextStyle(
+                    color: AppColors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 
-  @override
-  void onViewModelReady(MainViewModel viewModel) {
-    viewModel.init();
-    super.onViewModelReady(viewModel);
+  void _showCart(BuildContext context, MainViewModel viewModel) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (_) => ChangeNotifierProvider.value(
+        value: viewModel,
+        child: const CartSheet(),
+      ),
+    );
   }
 }

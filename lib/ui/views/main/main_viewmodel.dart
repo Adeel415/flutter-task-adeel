@@ -1,49 +1,87 @@
-import 'package:stacked/stacked.dart';
-import 'package:flutter_task_adeel/services/data_service.dart';
-import 'package:flutter_task_adeel/models/bundle.dart';
-import 'package:flutter_task_adeel/models/plan.dart';
-import 'package:flutter_task_adeel/app/app.locator.dart';
+import 'package:flutter/foundation.dart';
+import '../../../app/app.locator.dart';
+import '../../../models/bundle.dart';
+import '../../../models/plan.dart';
+import '../../../models/cart_item.dart';
+import '../../../services/data_service.dart';
 
-class MainViewModel extends BaseViewModel {
-  final DataService _dataService = locator<DataService>();
+enum BundleCategory { all, standard, unlimited }
 
-  String _selectedCategory = 'All';
-  List<Bundle> _bundles = [];
-  List<Plan> _regionalPlans = [];
+class MainViewModel extends ChangeNotifier {
+  final _dataService = locator<DataService>();
 
-  String get selectedCategory => _selectedCategory;
-  List<Bundle> get bundles => _bundles;
-  List<Plan> get regionalPlans => _regionalPlans;
+  List<Bundle> _allBundles = [];
+  List<Plan> _plans = [];
+  final List<CartItem> _cartItems = [];
 
-  void init() {
-    loadData();
+  BundleCategory _selectedCategory = BundleCategory.all;
+  BundleCategory get selectedCategory => _selectedCategory;
+
+  List<Bundle> get filteredBundles {
+    switch (_selectedCategory) {
+      case BundleCategory.standard:
+        return _allBundles.where((b) => !b.isUnlimited).toList();
+      case BundleCategory.unlimited:
+        return _allBundles.where((b) => b.isUnlimited).toList();
+      case BundleCategory.all:
+        return _allBundles;
+    }
   }
 
-  void loadData() {
-    setBusy(true);
+  List<Plan> get plans => _plans;
+  List<CartItem> get cartItems => List.unmodifiable(_cartItems);
 
-    // Simulate loading
-    Future.delayed(const Duration(milliseconds: 500), () {
-      _bundles = _dataService.getBundles();
-      _regionalPlans = _dataService.getRegionalPlans();
-      setBusy(false);
-      notifyListeners();
-    });
+  int get totalCartQuantity =>
+      _cartItems.fold(0, (sum, item) => sum + item.quantity);
+
+  double get totalCartPrice =>
+      _cartItems.fold(0.0, (sum, item) => sum + item.totalPrice);
+
+  bool get hasCartItems => _cartItems.isNotEmpty;
+
+  void initialize() {
+    _allBundles = _dataService.getBundlesForTurkey();
+    _plans = _dataService.getRegionalPlansForTurkey();
+    notifyListeners();
   }
 
-  void selectCategory(String category) {
+  void selectCategory(BundleCategory category) {
     _selectedCategory = category;
     notifyListeners();
   }
 
-  List<Bundle> get filteredBundles {
-    if (_selectedCategory == 'All') return _bundles;
-    if (_selectedCategory == 'Standard') {
-      return _bundles.where((b) => b.type == 'standard').toList();
+  void addToCart(Bundle bundle) {
+    final index = _cartItems.indexWhere((i) => i.bundle.id == bundle.id);
+    if (index != -1) {
+      _cartItems[index].quantity++;
+    } else {
+      _cartItems.add(CartItem(bundle: bundle));
     }
-    if (_selectedCategory == 'Unlimited') {
-      return _bundles.where((b) => b.type == 'unlimited').toList();
-    }
-    return _bundles;
+    notifyListeners();
   }
+
+  void removeFromCart(Bundle bundle) {
+    final index = _cartItems.indexWhere((i) => i.bundle.id == bundle.id);
+    if (index != -1) {
+      if (_cartItems[index].quantity > 1) {
+        _cartItems[index].quantity--;
+      } else {
+        _cartItems.removeAt(index);
+      }
+      notifyListeners();
+    }
+  }
+
+  void deleteFromCart(Bundle bundle) {
+    _cartItems.removeWhere((i) => i.bundle.id == bundle.id);
+    notifyListeners();
+  }
+
+  int getQuantityInCart(Bundle bundle) {
+    final matches = _cartItems.where((i) => i.bundle.id == bundle.id);
+    return matches.isEmpty ? 0 : matches.first.quantity;
+  }
+
+  bool isInCart(Bundle bundle) =>
+      _cartItems.any((i) => i.bundle.id == bundle.id);
 }

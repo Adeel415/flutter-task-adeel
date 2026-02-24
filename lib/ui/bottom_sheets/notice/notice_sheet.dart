@@ -37,7 +37,7 @@ class NoticeSheet extends StackedView<NoticeSheetModel> {
           ),
           Text(
             request.description!,
-            style: const TextStyle(fontSize: 14, color: AppColors.primaryBlue),
+            style: TextStyle(fontSize: 14, color: AppColors.priceBlue),
             maxLines: 3,
             softWrap: true,
           ),

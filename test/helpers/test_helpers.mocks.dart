@@ -691,9 +691,9 @@ class MockDialogService extends _i1.Mock implements _i2.DialogService {
 /// See the documentation for Mockito's code generation for more information.
 class MockDataService extends _i1.Mock implements _i7.DataService {
   @override
-  List<_i8.Bundle> getBundles() => (super.noSuchMethod(
+  List<_i8.Bundle> getBundlesForTurkey() => (super.noSuchMethod(
         Invocation.method(
-          #getBundles,
+          #getBundlesForTurkey,
           [],
         ),
         returnValue: <_i8.Bundle>[],
@@ -701,9 +701,9 @@ class MockDataService extends _i1.Mock implements _i7.DataService {
       ) as List<_i8.Bundle>);
 
   @override
-  List<_i9.Plan> getRegionalPlans() => (super.noSuchMethod(
+  List<_i9.Plan> getRegionalPlansForTurkey() => (super.noSuchMethod(
         Invocation.method(
-          #getRegionalPlans,
+          #getRegionalPlansForTurkey,
           [],
         ),
         returnValue: <_i9.Plan>[],
