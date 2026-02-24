@@ -1,16 +1,23 @@
 import 'package:flutter/material.dart';
 
 class AppColors {
-  static const Color primaryBlue = Color(0xFF1A73E8);
-  static const Color primaryDarkBlue = Color(0xFF0D47A1);
-  static const Color green = Color(0xFF34A853);
+  AppColors._();
 
-  static const Color background = Color(0xFFF5F5F5);
-  static const Color cardBackground = Colors.white;
+  static const Color primary = Color(0xFF007AFF);
+  static const Color primary2 = Color(0xFF189FC7);
 
-  static const Color textPrimary = Color(0xFF202124);
-  static const Color textSecondary = Color(0xFF5F6368);
-
-  static const Color border = Color(0xFFE0E0E0);
-  static const Color chipSelected = Color(0xFFE8F0FE);
+  static const Color background = Color(0xFFF2F2F7);
+  static const Color white = Color(0xFFFFFFFF);
+  static const Color textPrimary = Color(0xFF1C1C1E);
+  static const Color textSecondary = Color(0xFF8E8E93);
+  static const Color borderColor = Color(0xFFE5E5EA);
+  static const Color cardBackground = Color(0xFFFFFFFF);
+  static const Color chipSelected = Color(0xFF007AFF);
+  static const Color chipUnselected = Color(0xFFFFFFFF);
+  static const Color checkoutButton = Color(0xFF34C759);
+  static const Color priceBlue = Color(0xFF007AFF);
+  static const Color subtitleGray = Color(0xFF181820);
+  static const Color divider = Color(0xFFE5E5EA);
+  static const Color cartBottomSheet = Color(0xFFF9F9F9);
+  static const Color removeRed = Color(0xFFFF3B30);
 }

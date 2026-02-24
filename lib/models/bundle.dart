@@ -1,15 +1,19 @@
 class Bundle {
-  final String name;
-  final String data;
-  final String validity;
-  final double price;
-  final String type;
+  final String id;
+  final double dataGB;
+  final int validDays;
+  final double priceUSD;
+  final bool isUnlimited;
 
-  Bundle({
-    required this.name,
-    required this.data,
-    required this.validity,
-    required this.price,
-    required this.type,
+  const Bundle({
+    required this.id,
+    required this.dataGB,
+    required this.validDays,
+    required this.priceUSD,
+    this.isUnlimited = false,
   });
+
+  String get dataLabel => isUnlimited ? 'Unlimited' : '${dataGB % 1 == 0 ? dataGB.toInt() : dataGB} GB';
+  String get validLabel => 'Valid for:\n$validDays days';
+  String get priceLabel => 'USD ${priceUSD.toStringAsFixed(2)}';
 }

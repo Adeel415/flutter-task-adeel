@@ -1,13 +1,19 @@
 class Plan {
+  final String id;
   final String name;
-  final String data;
-  final String validity;
-  final double price;
+  final String dataLabel;
+  final String validLabel;
+  final int supportedCountries;
+  final double priceUSD;
 
-  Plan({
+  const Plan({
+    required this.id,
     required this.name,
-    required this.data,
-    required this.validity,
-    required this.price,
+    required this.dataLabel,
+    required this.validLabel,
+    required this.supportedCountries,
+    required this.priceUSD,
   });
+
+  String get priceFormatted => 'USD ${priceUSD.toStringAsFixed(2)}';
 }
