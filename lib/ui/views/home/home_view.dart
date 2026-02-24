@@ -7,10 +7,10 @@ class HomeView extends StackedView<HomeViewModel> {
 
   @override
   Widget builder(
-      BuildContext context,
-      HomeViewModel viewModel,
-      Widget? child,
-      ) {
+    BuildContext context,
+    HomeViewModel viewModel,
+    Widget? child,
+  ) {
     return const Scaffold(
       body: Center(
         child: Text('Home View'), // Just a placeholder

@@ -7,10 +7,10 @@ class StartupView extends StackedView<StartupViewModel> {
 
   @override
   Widget builder(
-      BuildContext context,
-      StartupViewModel viewModel,
-      Widget? child,
-      ) {
+    BuildContext context,
+    StartupViewModel viewModel,
+    Widget? child,
+  ) {
     return const Scaffold(
       body: Center(
         child: CircularProgressIndicator(),
