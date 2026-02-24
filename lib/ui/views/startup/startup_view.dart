@@ -7,13 +7,33 @@ class StartupView extends StackedView<StartupViewModel> {
 
   @override
   Widget builder(
-    BuildContext context,
-    StartupViewModel viewModel,
-    Widget? child,
-  ) {
-    return const Scaffold(
+      BuildContext context,
+      StartupViewModel viewModel,
+      Widget? child,
+      ) {
+    // Call navigation after build
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      viewModel.runStartupLogic();
+    });
+
+    return Scaffold(
       body: Center(
-        child: CircularProgressIndicator(),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            CircularProgressIndicator(
+              valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
+            ),
+            SizedBox(height: 20),
+            Text(
+              'Loading Bundles...',
+              style: TextStyle(
+                fontSize: 16,
+                color: Colors.grey[600],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

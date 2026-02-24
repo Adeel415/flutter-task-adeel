@@ -1,10 +1,10 @@
 import 'package:stacked/stacked.dart';
-import '../../../app/app.locator.dart';
-import '../../../models/bundle.dart';
-import '../../../models/plan.dart';
-import '../../../services/data_service.dart';
+import 'package:flutter_task_adeel/services/data_service.dart';
+import 'package:flutter_task_adeel/models/bundle.dart';
+import 'package:flutter_task_adeel/models/plan.dart';
+import 'package:flutter_task_adeel/app/app.locator.dart';
 
-class HomeViewmodel extends BaseViewModel {
+class MainViewModel extends BaseViewModel {
   final DataService _dataService = locator<DataService>();
 
   String _selectedCategory = 'All';
@@ -42,8 +42,7 @@ class HomeViewmodel extends BaseViewModel {
       return _bundles.where((b) => b.type == 'standard').toList();
     }
     if (_selectedCategory == 'Unlimited') {
-      // Add unlimited bundle logic if needed
-      return [];
+      return _bundles.where((b) => b.type == 'unlimited').toList();
     }
     return _bundles;
   }

@@ -7,7 +7,10 @@ class StartupViewModel extends BaseViewModel {
   final _navigationService = locator<NavigationService>();
 
   Future<void> runStartupLogic() async {
-    // Just navigate to your main view
-    await _navigationService.replaceWithHomeView();
+    // Simulate loading (optional)
+    await Future.delayed(Duration(seconds: 2));
+
+    // Navigate to home
+    await _navigationService.replaceWith(Routes.mainView);
   }
 }

@@ -1,12 +1,12 @@
-import 'package:flutter_task_adeel/ui/views/home/home_viewmodel.dart';
+import 'package:flutter_task_adeel/ui/views/main/main_viewmodel.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('HomeViewModel', () {
-    late HomeViewModel model;
+    late MainViewmodel model;
 
     setUp(() {
-      model = HomeViewModel();
+      model = MainViewmodel();
     });
 
     test('should be initialized correctly', () {

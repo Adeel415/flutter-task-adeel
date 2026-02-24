@@ -1,16 +1,33 @@
-import 'package:get_it/get_it.dart';
-import 'package:stacked_services/stacked_services.dart';
+// GENERATED CODE - DO NOT MODIFY BY HAND
 
-final locator = GetIt.instance;
+// **************************************************************************
+// StackedLocatorGenerator
+// **************************************************************************
 
-Future setupLocator() async {
+// ignore_for_file: public_member_api_docs, implementation_imports, depend_on_referenced_packages
 
+import 'package:stacked_services/src/bottom_sheet/bottom_sheet_service.dart';
+import 'package:stacked_services/src/dialog/dialog_service.dart';
+import 'package:stacked_services/src/navigation/navigation_service.dart';
+import 'package:stacked_services/src/snackbar/snackbar_service.dart';
+import 'package:stacked_shared/stacked_shared.dart';
+
+import '../services/data_service.dart';
+
+final locator = StackedLocator.instance;
+
+Future<void> setupLocator({
+  String? environment,
+  EnvironmentFilter? environmentFilter,
+}) async {
+// Register environments
+  locator.registerEnvironment(
+      environment: environment, environmentFilter: environmentFilter);
+
+// Register dependencies
   locator.registerLazySingleton(() => NavigationService());
   locator.registerLazySingleton(() => DialogService());
   locator.registerLazySingleton(() => SnackbarService());
   locator.registerLazySingleton(() => BottomSheetService());
-
-  // Register your ViewModels here as you create them
-  // locator.registerFactory(() => HomeViewModel());
-  // locator.registerFactory(() => BundlesViewModel());
+  locator.registerLazySingleton(() => DataService());
 }
