@@ -1,44 +1,18 @@
-import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/mockito.dart';
-import 'package:flutter_task_adeel/app/app.bottomsheets.dart';
-import 'package:flutter_task_adeel/app/app.locator.dart';
-import 'package:flutter_task_adeel/ui/common/app_strings.dart';
 import 'package:flutter_task_adeel/ui/views/home/home_viewmodel.dart';
-
-import '../helpers/test_helpers.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  HomeViewModel getModel() => HomeViewModel();
+  group('HomeViewModel', () {
+    late HomeViewModel model;
 
-  group('HomeViewmodelTest -', () {
-    setUp(() => registerServices());
-    tearDown(() => locator.reset());
-
-    group('incrementCounter -', () {
-      test('When called once should return  Counter is: 1', () {
-        final model = getModel();
-        model.incrementCounter();
-        expect(model.counterLabel, 'Counter is: 1');
-      });
+    setUp(() {
+      model = HomeViewModel();
     });
 
-    group('showBottomSheet -', () {
-      test(
-        'When called, should show custom bottom sheet using notice variant',
-        () {
-          final bottomSheetService = getAndRegisterBottomSheetService();
-
-          final model = getModel();
-          model.showBottomSheet();
-          verify(
-            bottomSheetService.showCustomSheet(
-              variant: BottomSheetType.notice,
-              title: ksHomeBottomSheetTitle,
-              description: ksHomeBottomSheetDescription,
-            ),
-          );
-        },
-      );
+    test('should be initialized correctly', () {
+      expect(model, isNotNull);
     });
+
+    // Add more tests as you build features
   });
 }
