@@ -1,17 +1,24 @@
-import 'package:stacked/stacked_annotations.dart';
+import 'package:flutter/material.dart';
 import 'package:stacked_services/stacked_services.dart';
-import '../ui/views/home/home_view.dart';
 
-@StackedApp(
-  routes: [
-    MaterialRoute(page: HomeView, initial: true),
-    // Add other routes here
-  ],
-  dependencies: [
-    LazySingleton(classType: NavigationService),
-    LazySingleton(classType: DialogService),
-    LazySingleton(classType: SnackbarService),
-    LazySingleton(classType: BottomSheetService),
-  ],
-)
-class App {}
+import 'app.router.dart';
+
+class App extends StatelessWidget {
+  const App({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Bundles Turkey',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+        scaffoldBackgroundColor: Colors.white,
+        fontFamily: 'Roboto',
+      ),
+      debugShowCheckedModeBanner: false,
+      navigatorKey: StackedService.navigatorKey,
+      onGenerateRoute: StackedRouter().onGenerateRoute,
+      initialRoute: Routes.homeView,
+    );
+  }
+}
